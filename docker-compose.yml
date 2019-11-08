@@ -1,0 +1,12 @@
+version: '3'
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    volumes:
+      - .:/emarsys_test
+    ports:
+      - "4567:4567"
+    depends_on:
+      - db

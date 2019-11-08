@@ -6,8 +6,10 @@ https://github.com/noslopy/emarsys_test/files/3819796/Developer.homework._.2019.
 #### Solution:
 
 * language: ruby 💎
-* framework: rails 🛤️
+* framework: sinatra 👨‍🎤
+* persistent storage: postgreSQL 🗃️
 
-The scenrio is the following: We have a ruby on rails application with a Model that defines Issues of an issue tracker.
-We have persistent storage which stores the submit-date of an issue and turnaround-time in which the issue must be solved.
+So in this scenrio we have a separate service - a sinatra microservice - that acts as an API for Issues.
+I dockerized the app to ease the configuration & setup.
+
 
