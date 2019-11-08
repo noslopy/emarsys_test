@@ -2,6 +2,7 @@
 
 require 'sinatra'
 require 'sinatra/activerecord'
+require './models/issues.rb'
 
 set :database_file, './config/database.yml'
 register Sinatra::ActiveRecordExtension
@@ -9,29 +10,70 @@ register Sinatra::ActiveRecordExtension
 get '/' do
   content_type 'application/json'
 
-  'Hello'
+  status 200
+  body 'Sinatra app is running'
 end
 
 get '/issues' do
   content_type 'application/json'
 
-  [1, 2, 3, 4].to_json
+  Issue.all.to_json
 end
 
 post '/issues/new' do
-  { asd: 'asd' }.to_json
+  content_type 'application/json'
+
+  begin
+    status 200
+    Issue.create!(
+      name: params[:name],
+      description: params[:description],
+      turnaround: params[:turnaround],
+      submit_date: params[:submit_date]
+    )
+  rescue
+    status 400
+    'Missing params'
+  end
 end
 
-patch '/issues/issue_id' do |issue_id|
-  { asd: issue_id }.to_json
+patch '/issues/:issue_id' do
+  content_type 'application/json'
+
+  begin
+    status 200
+    update_params = params.slice(:name, :description, :turnaround)
+    issue = Issue.find(params[:issue_id])
+    issue.update!(update_params)
+  rescue
+    status 400
+    'No Issue found with given id'
+  end
 end
 
-delete '/issues/issue_id' do |issue_id|
-  { asd: issue_id }.to_json
+delete '/issues/:issue_id' do
+  content_type 'application/json'
+
+  begin
+    status 200
+    Issue.delete(params[:issue_id])
+  rescue
+    status 400
+    'No Issue found with given id'
+  end
 end
 
-get '/issues/:issue_id' do |issue_id|
-  content_type   'application/json'
+get '/issues/:issue_id' do
+  content_type 'application/json'
 
-  { asd: issue_id }.to_json
+  begin
+    status 200
+    issue = Issue.find(params[:issue_id])
+    issue_hash = JSON.parse(issue.to_json)
+    issue_hash['due_date'] = issue.calculate_due_date
+    issue_hash.to_json
+  rescue
+    status 400
+    'No Issue found with given id'
+  end
 end

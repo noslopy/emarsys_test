@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2019_11_08_152532) do
     t.string "name"
     t.text "description"
     t.integer "turnaround"
+    t.datetime "submit_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
