@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-ENV['APP_ENV'] = 'test'
-
-require_relative '../../issues.rb'
-require 'minitest/autorun'
-require 'rack/test'
+require_relative '../test_helper.rb'
 
 include Rack::Test::Methods
 
