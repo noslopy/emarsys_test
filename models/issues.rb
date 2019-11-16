@@ -38,6 +38,6 @@ class Issue < ActiveRecord::Base
   private
 
   def submit
-    errors.add('Out of work hours') if not_work_hours
+    errors.add(:submit_date, '-> Out of work hours') if not_work_hours
   end
 end

@@ -31,9 +31,9 @@ post '/issues/new' do
       turnaround: params[:turnaround],
       submit_date: params[:submit_date]
     )
-  rescue
+  rescue StandardError => e
     status 400
-    'Missing params'
+    "Error: #{e.message}"
   end
 end
 
@@ -45,9 +45,9 @@ patch '/issues/:issue_id' do
     update_params = params.slice(:name, :description, :turnaround)
     issue = Issue.find(params[:issue_id])
     issue.update!(update_params)
-  rescue
+  rescue StandardError => e
     status 400
-    'No Issue found with given id'
+    "Error: #{e.message}"
   end
 end
 
@@ -57,9 +57,9 @@ delete '/issues/:issue_id' do
   begin
     status 200
     Issue.delete(params[:issue_id])
-  rescue
+  rescue StandardError => e
     status 400
-    'No Issue found with given id'
+    "Error: #{e.message}"
   end
 end
 
@@ -72,8 +72,8 @@ get '/issues/:issue_id' do
     issue_hash = JSON.parse(issue.to_json)
     issue_hash['due_date'] = issue.calculate_due_date
     issue_hash.to_json
-  rescue
+  rescue StandardError => e
     status 400
-    'No Issue found with given id'
+    "Error: #{e.message}"
   end
 end

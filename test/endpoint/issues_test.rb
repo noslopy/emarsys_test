@@ -35,12 +35,15 @@ describe 'Issues sinatra service' do
   it 'doesnt creates issue with submit-date outside of workhour' do
     post '/issues/new', name: 'task', description: 'a short task', turnaround: 8, submit_date: '2019-11-08 8:00:00'
     assert_equal 400, last_response.status
+    assert last_response.body.include? 'Out of work hours'
     assert_equal 0, Issue.count
     post '/issues/new', name: 'task', description: 'a short task', turnaround: 8, submit_date: '2019-11-08 18:00:00'
     assert_equal 400, last_response.status
+    assert last_response.body.include? 'Out of work hours'
     assert_equal 0, Issue.count
     post '/issues/new', name: 'task', description: 'a short task', turnaround: 8, submit_date: '2019-11-09 10:00:00'
     assert_equal 400, last_response.status
+    assert last_response.body.include? 'Out of work hours'
     assert_equal 0, Issue.count
   end
 
